@@ -32,7 +32,7 @@ with herzog.Cell("python"):
     import json
     import logging
     from uuid import uuid4
-    from terra_notebook_utils import drs, vcf, workspace, profile, table, workflows
+    from terra_notebook_utils import drs, workspace, profile, table, workflows
     bucket_name = os.environ['WORKSPACE_BUCKET'][5:]
     DRS_URI_370_KB = "drs://dg.4503/6ffc2f59-2596-405c-befd-9634dc0ed837"  # 1000 Genomes, 370.38 KB
     DRS_URI_021_MB = "drs://dg.4503/48286908-b079-4407-8773-5ab8ab42df12"  # 1000 Genomes, 20.62 MB
@@ -79,13 +79,6 @@ with herzog.Cell("python"):
     """Test drs extract tarball"""
     drs.extract_tar_gz(DRS_URI_TAR_GZ, ".")
     drs.extract_tar_gz(DRS_URI_TAR_GZ, f"gs://{bucket_name}/test-notebook-{uuid4()}")
-
-with herzog.Cell("python"):
-    """Test vcf info"""
-    blob = drs.blob_for_url(DRS_URI_100_GB, os.environ['GOOGLE_PROJECT'])
-    info = vcf.VCFInfo.with_blob(blob)
-    assert 2504 == len(info.samples)
-    assert "HG00096" == info.samples[0]
 
 with herzog.Cell("python"):
     """Test workspace get"""

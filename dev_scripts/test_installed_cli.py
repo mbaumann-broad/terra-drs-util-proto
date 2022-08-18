@@ -104,18 +104,6 @@ class TestTerraNotebookUtilsReleaseCLI(unittest.TestCase):
     def test_drs_extract_tar_gz(self):
         run(f"{TNU} drs extract-tar-gz {WORKSPACE_ARGS} {DRS_URI_TAR_GZ}")
 
-    def test_vcf_head(self):
-        run(f"{TNU} vcf head {WORKSPACE_ARGS} {DRS_URI_240_MB}")
-
-    def test_vcf_samples(self):
-        d = run_json(f"{TNU} vcf samples {WORKSPACE_ARGS} {DRS_URI_100_GB}")
-        self.assertEqual(2504, len(d))
-        self.assertEqual("HG00096", d[0])
-
-    def test_vcf_stats(self):
-        d = run_json(f"{TNU} vcf stats {WORKSPACE_ARGS} {DRS_URI_100_GB}")
-        self.assertEqual(107536394413, d['size'])
-
     def test_workspace_list(self):
         run_json(f"{TNU} workspace list")
 

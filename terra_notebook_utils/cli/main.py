@@ -4,7 +4,6 @@ import sys
 # Only the commands modules imported here are available to the CLI
 # These must be imported before dispatch
 import terra_notebook_utils.cli.commands.config
-import terra_notebook_utils.cli.commands.vcf
 import terra_notebook_utils.cli.commands.workspace
 import terra_notebook_utils.cli.commands.profile
 import terra_notebook_utils.cli.commands.drs
