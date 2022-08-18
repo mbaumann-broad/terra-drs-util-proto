@@ -1,41 +1,17 @@
-# terra-notebook-utils
+# terra-drs-util-proto
 Python API and CLI providing utilities for working with [DRS](https://support.terra.bio/hc/en-us/articles/360039330211)
-objects, [VCF](https://samtools.github.io/hts-specs/VCFv4.1.pdf) files, and the
-[Terra notebook environment](https://support.terra.bio/hc/en-us/articles/360027237871-Terra-s-Jupyter-Notebooks-environment-Part-I-Key-components).
+objects
 
 ## Installation
 
 From the CLI:
 ```
-pip install terra-notebook-utils
+pip3 install --upgrade --no-cache-dir git+https://github.com/mbaumann-broad/terra-drs-util-proto
 ```
 
 In a Jupyter notebook (note the ipython magic "[%pip](https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pip)"):
 ```
-%pip install terra-notebook-utils
-```
-
-## Upgrading
-
-It is often useful to keep up to date with new features and bug fixes. Installing the latest version of
-terra-notebook-utils depends on your host environment.
-
-From any Jupyter notebook, use the following (and note the leading "%")
-```
-%pip install --upgrade --no-cache-dir terra-notebook-utils
-```
-
-From the CLI on standard Terra notebook runtimes, which are available using the terminal button in the Terra user
-interface, use
-```
-/usr/local/bin/pip install --upgrade --no-cache-dir terra-notebook-utils
-```
-Note that all standard notebook runtimes on Terra are based on
-[this Docker image](https://github.com/databiosphere/terra-docker#terra-base-images).
-
-For other environments, it is often enough to do
-```
-pip install --upgrade --no-cache-dir terra-notebook-utils
+%pip install --upgrade --no-cache-dir git+https://github.com/mbaumann-broad/terra-drs-util-proto
 ```
 
 ## Credentials
@@ -48,33 +24,23 @@ gcloud auth application-default login
 
 ## Usage
 
-terra-notebook-utils exposes a Python API, as well as wrappers to execute some functionality on the CLI. The Python
+terra-drs-util exposes a Python API, as well as wrappers to execute some functionality on the CLI. The Python
 API is best explored with Pythons great `help` function. For instance, issuing the follow commands into a Python
 interpreter or Jupyter notebook will produce help and usage for the `drs` module.
 ```
-import terra_notebook_utils as tnu
-help(tnu.drs)
+import terra_drs_util as tdu
+help(tdu.drs)
 ```
 
 Similarly, the CLI may be explored using the typical `-h` argument. Try the following commands at a bash prompt.
 ```
 # See the command groups available to the CLI
-tnu -h
-```
-
-```
-# See the commands available to the vcf group
-tnu vcf -h
-```
-
-```
-# Show your available workspace namespaces (also known as Google billing projects)
-tnu profile list-workspace-namespaces
+tdu -h
 ```
 
 ```
 # Show version
-tnu --version
+tdu --version
 ```
 
 ### CLI Configuration
@@ -82,34 +48,34 @@ tnu --version
 Several CLI commands target a workspace or require a workspace namespace. Defaults can be configured using the
 commands
 ```
-tnu config set-workspace my-workspace
-tnu config set-workspace-google-project my-workspace-namespace
+tdu config set-workspace my-workspace
+tdu config set-workspace-google-project my-workspace-namespace
 ```
 
 Note that workspace namespace is the same as Google billing project.
 
 Alternatively, workspace and workspace namespace can be passed in to individual commands instead of, or as overrides to,
-the configured defaults. See command help, e.g. `tnu table get --help`, for usage information.
+the configured defaults. See command help, e.g. `tdu table get --help`, for usage information.
 
 Finally, workspace and workspace namespace can be specified with the environment variables
 `WORKSPACE_NAME` and `GOOGLE_PROJECT`. These values are used with lowest precedence.
 
 ### The DRS API and CLI
 
-terra-notebook-utils provides several methods and CLI commands useful for working with
+terra-drs-util provides several methods and CLI commands useful for working with
 [DRS](https://github.com/ga4gh/data-repository-service-schemas) resolved objects:
 
 #### Python API
 
 Return information about a DRS object:
 ```
-from terra_notebook_utils import drs
+from terra_drs_util import drs
 drs.info("drs://my-drs-url")
 ```
 
 Copy a DRS object to local file system or bucket:
 ```
-from terra_notebook_utils import drs
+from terra_drs_util import drs
 drs.copy("drs://my-drs-url", "gs://my-dst-bucket/my-dst-key")
 drs.copy("drs://my-drs-url", "local_filepath")
 drs.copy_batch(["drs://my-drs-url1", "drs://my-drs-url2"], "local_directory")
@@ -118,13 +84,13 @@ drs.copy_batch(["drs://my-drs-url1", "drs://my-drs-url2"], "gs://my-dst-bucket/p
 
 Head a DRS object:
 ```
-from terra_notebook_utils import drs
+from terra_drs_util import drs
 drs.head("drs://my-drs-url", num_bytes=10)
 ```
 
 Return a signed URL to access a DRS object:
 ```
-from terra_notebook_utils import drs
+from terra_drs_util import drs
 drs.access("drs://my-drs-url")
 ```
 
@@ -132,59 +98,29 @@ drs.access("drs://my-drs-url")
 
 Information about a DRS object:
 ```
-tnu drs info drs://my-drs-url
+tdu drs info drs://my-drs-url
 ```
 
 Copy a DRS object to local or bucket:
 ```
-tnu drs copy drs://my-drs-url gs://my-dst-bucket/my-dstkey
-tnu drs copy drs://my-drs-url local_filepath
-tnu drs copy-batch drs://my-drs-url1 drs://my-drs-url2 --dst local_directory
-tnu drs copy-batch drs://my-drs-url1 drs://my-drs-url2 --dst gs://my-dst-bucket/prefix
+tdu drs copy drs://my-drs-url gs://my-dst-bucket/my-dstkey
+tdu drs copy drs://my-drs-url local_filepath
+tdu drs copy-batch drs://my-drs-url1 drs://my-drs-url2 --dst local_directory
+tdu drs copy-batch drs://my-drs-url1 drs://my-drs-url2 --dst gs://my-dst-bucket/prefix
 ```
 
 Head a DRS object:
 ```
-tnu drs head drs://my-drs-url --bytes 10
+tdu drs head drs://my-drs-url --bytes 10
 ```
 
 Return a signed URL to access a DRS object:
 ```
-tnu drs access drs://my-drs-url
+tdu drs access drs://my-drs-url
 ```
 
 The CLI outputs error messages, not strack traces. Stack traces are available by defining the environment variable
 `TNU_CLI_DEBUG`.
-
-### The VCF API and CLI
-
-terra-notebook-utils provides some CLI commands useful for getting information about VCF files.
-These commands work for VCFs stored locally, in a Google Storage bucket, or at a DRS url.
-
-Print VCF header:
-```
-tnu vcf head drs://my-vcf
-tnu vcf head gs://my-vcf
-tnu vcf head my.vcf.gz
-```
-
-Print VCF samples:
-```
-tnu vcf samples drs://my-vcf
-tnu vcf samples gs://my-vcf
-tnu vcf samples my.vcf.gz
-```
-
-Print VCF stats. This command executes quickly, and shows the length and file size of the VCF. If
-the VCF is compressed, the compressed size is returned.
-```
-tnu vcf stats drs://my-vcf
-tnu vcf stats gs://my-vcf
-tnu vcf stats my.vcf.gz
-```
-
-While a Python API for working with VCFs is currently available, usage is more complex. Please contact the
-maintainer for more information.
 
 ## Local Development
 For local development:
@@ -192,7 +128,7 @@ For local development:
 Developing within a docker image is recommended, since that most closely models how users will use this. Additionally, there are some issues with installing the requirements.txt on mac.
 If you don't wish to run this within a docker image, skip to step 5.
 2. run `docker pull us.gcr.io/broad-dsp-gcr-public/terra-jupyter-python:0.0.12`
-3. run the image from *one directory above* the root directory of this repo via `docker run -itd --entrypoint='/bin/bash' -v $PWD/terra-notebook-utils:/work -u root -e PIP_USER=false --name test-image us.gcr.io/broad-dsp-gcr-public/terra-jupyter-python:0.0.12`
+3. run the image from *one directory above* the root directory of this repo via `docker run -itd --entrypoint='/bin/bash' -v $PWD/terra-drs-util:/work -u root -e PIP_USER=false --name test-image us.gcr.io/broad-dsp-gcr-public/terra-jupyter-python:0.0.12`
 4. Attach your terminal to the image via `docker exec -it test-image bash`, then navigate to the directory the code is mounted to via `cd /work`. Note that the above command ensures any changes you make to files in the repo will be updated in the image as well.
 5. log in with your Google credentials using `gcloud auth application-default login`,
 6. install requirements with `pip install -r requirements.txt`
@@ -205,10 +141,10 @@ If you don't wish to run this within a docker image, skip to step 5.
     - if you would like to run DRS methods against `martha_v2`, run `export MARTHA_URL_VERSION=martha_v2` (it is set to `martha_v3` by default)
 
 For Python API
-  - run the python shell via `python`, and import any modules you wish to use. For example, `from terra_notebook_utils import drs`
+  - run the python shell via `python`, and import any modules you wish to use. For example, `from terra_drs_util import drs`
 
 For CLI
-  - run `scripts/tnu <command>`, for example `scripts/tnu drs copy drs://url/here local_path`
+  - run `scripts/tdu <command>`, for example `scripts/tdu drs copy drs://url/here local_path`
 
 Sample DRS urls used in tests:
 (you would need to get access to these before successfully resolving them)
@@ -218,9 +154,9 @@ Make sure you are setting proper environment variables mentioned in step 7 for e
 
 
 ## Tests
-To run tests, follow the same setup from Local Development till step 4. Make sure your account has access to the workspace `terra-notebook-utils-tests`
+To run tests, follow the same setup from Local Development till step 4. Make sure your account has access to the workspace `terra-drs-util-tests`
 1. install requirements with `pip install -r requirements-dev.txt`
-2. set `export WORKSPACE_NAME=terra-notebook-utils-tests`
+2. set `export WORKSPACE_NAME=terra-drs-util-tests`
 
 **Test Env: Dev** (currently it has tests for DRS methods)
 
@@ -264,10 +200,10 @@ Once tests pass, you can move to the release step
 If a release needs to be rolled back for some reason, please contact Lon Blauvelt (lblauvel at ucsc dot edu) for help.
 
 ## Links
-Project home page [GitHub](https://github.com/DataBiosphere/terra-notebook-utils)
-Package distribution [PyPI](https://pypi.org/project/terra-notebook-utils)
+Project home page [GitHub](https://github.com/mbaumann-broad/terra-drs-util-proto)
+Package distribution [PyPI](https://pypi.org/project/terra-drs-util)
 
 ### Bugs
-Please report bugs, issues, feature requests, etc. on [GitHub](https://github.com/DataBiosphere/terra-notebook-utils).
+Please report bugs, issues, feature requests, etc. on [GitHub](https://github.com/mbaumann-broad/terra-drs-util-proto).
 
-![](https://biodata-integration-tests.net/xbrianh/terra-notebook-utils/badges/master/pipeline.svg) ![](https://badge.fury.io/py/terra-notebook-utils.svg)
+![](https://biodata-integration-tests.net/xbrianh/terra-drs-util/badges/master/pipeline.svg) ![](https://badge.fury.io/py/terra-drs-util.svg)
